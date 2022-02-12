@@ -26,6 +26,11 @@ namespace Services.Concrete
 
         public async Task<IResult> Register(RegisterDto registerDto)
         {
+            var mailExist = await _unitOfWork.Users.GetAsync(q => q.Email == registerDto.Email);
+            if (mailExist != null)
+            {
+                return new ErrorResult("Mail Adresi Kayıtlıdır.");
+            }
             HashingHelper.CreatePasswordHash(registerDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
             var user = new User()
             {
