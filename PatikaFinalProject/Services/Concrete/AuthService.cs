@@ -3,6 +3,7 @@ using Entities.Concrete;
 using Entities.Dtos;
 using Services.Abstract;
 using Services.Helpers;
+using Services.Utilities.Jobs;
 using Services.Utilities.Jwt;
 using Services.Utilities.Result;
 using System;
@@ -43,8 +44,14 @@ namespace Services.Concrete
             };
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.SaveAsync();
+            SendMailJob.SendMailEnqueue(new Utilities.Services.Models.MailRequest()
+            {
+                ToEmail = registerDto.Email,
+                Subject = "Hoş Geldiniz.",
+                Body = "Kayıt olduğunuz için teşekkürler. Hoş Geldiniz! :)"
+            });
             return new SuccessResult("Kaydınız Oluşturuldu.");
-            //NOT: MAİL GÖNDERİLECEK.
+
         }
         //giriş işlemleri için;
         public async Task<IDataResult<User>> Login(LoginDto loginDto)

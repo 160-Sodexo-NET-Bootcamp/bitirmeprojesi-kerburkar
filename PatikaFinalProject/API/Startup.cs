@@ -2,6 +2,7 @@
 using Data.Concrete.EntityFramework;
 using Data.Concrete.EntityFramework.Contexts;
 using FluentValidation.AspNetCore;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -87,6 +88,10 @@ namespace API
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IMailService, MailService>();
 
+            //hangfire
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration["ConnectionStrings:DefaultHangfireConnection"]));
+            services.AddHangfireServer();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
@@ -108,6 +113,9 @@ namespace API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //hangfire
+            app.UseHangfireDashboard();
 
             app.UseEndpoints(endpoints =>
             {
