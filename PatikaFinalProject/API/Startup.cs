@@ -18,6 +18,7 @@ using Services.Abstract;
 using Services.Concrete;
 using Services.Helpers;
 using Services.Utilities.Jwt;
+using Services.Utilities.Mapping.AutoMapper;
 using Services.Utilities.Services;
 using Services.Utilities.Services.Models;
 using Services.Utilities.Validation;
@@ -66,6 +67,7 @@ namespace API
             //Proje derlendiğinde UnitOfWork çalışması için eklendi.
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ITokenHelper, JwtHelper>();
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -88,7 +90,10 @@ namespace API
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IMailService, MailService>();
 
-            //hangfire
+            //AutoMapper için
+            services.AddAutoMapper(typeof(CustomProfile));
+
+            //hangfire için
             services.AddHangfire(x => x.UseSqlServerStorage(Configuration["ConnectionStrings:DefaultHangfireConnection"]));
             services.AddHangfireServer();
 
