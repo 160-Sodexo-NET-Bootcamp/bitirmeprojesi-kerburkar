@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract;
+using Services.Utilities.Services;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -10,10 +11,12 @@ namespace API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService; 
-        public AuthController(IAuthService authService)
+        private readonly IAuthService _authService;
+        private readonly IMailService _mailService;
+        public AuthController(IAuthService authService, IMailService mailService)
         {
             _authService = authService;
+            _mailService = mailService;
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerdto)

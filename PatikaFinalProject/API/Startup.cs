@@ -17,6 +17,8 @@ using Services.Abstract;
 using Services.Concrete;
 using Services.Helpers;
 using Services.Utilities.Jwt;
+using Services.Utilities.Services;
+using Services.Utilities.Services.Models;
 using Services.Utilities.Validation;
 using System;
 using System.Collections.Generic;
@@ -81,6 +83,10 @@ namespace API
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey))
                     };
                 });
+            //mail servisi için
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IMailService, MailService>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
