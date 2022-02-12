@@ -4,6 +4,7 @@ using Entities.Dtos;
 using Services.Abstract;
 using Services.Helpers;
 using Services.Utilities.Jwt;
+using Services.Utilities.Result;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Services.Concrete
             _tokenHelper = tokenHelper;
         }
 
-        public async Task<string> Register(RegisterDto registerDto)
+        public async Task<IResult> Register(RegisterDto registerDto)
         {
             HashingHelper.CreatePasswordHash(registerDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
             var user = new User()
@@ -37,23 +38,24 @@ namespace Services.Concrete
             };
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.SaveAsync();
-            return "Kaydınız Başarıyla Oluşturuldu.";
+            return new SuccessResult("Kaydınız Oluşturuldu.");
             //NOT: MAİL GÖNDERİLECEK.
         }
         //giriş işlemleri için;
-        public async Task<string> Login(LoginDto loginDto)
+        public async Task<IDataResult<User>> Login(LoginDto loginDto)
         {
             var user = await _unitOfWork.Users.GetAsync(q=>q.Email==loginDto.Email);
             if (user == null)
             {
-                return "Kullanıcı Bulunamadı.";
+                return new ErrorDataResult<User>(null, "Kullanıcı Bulunamadı.");
             }
             var checkPassword = HashingHelper.VerifyPasswordHash(loginDto.Password,user.PasswordHash,user.PasswordSalt);
             if (!checkPassword)
             {
-                return "Şifre Yanlış.";
+                return new ErrorDataResult<User>(null, "Şifre Yanlış.");
             }
-            return "Success";
+            return new SuccessDataResult<User>(user, "Başarıyla Giriş Yaptınız.");
+            
         }
         public AccessToken CreateToken(User user)
         {

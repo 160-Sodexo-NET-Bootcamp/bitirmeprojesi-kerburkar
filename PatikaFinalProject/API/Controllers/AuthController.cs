@@ -28,17 +28,12 @@ namespace API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto logindto)
         {
             var result = await _authService.Login(logindto);
-            if(result == "Success")
-            {
-                var user = await _authService.GetUserByEmail(logindto.Email);
-                var accessToken = _authService.CreateToken(user);
+            if(result.IsSuccess)
+            {               
+                var accessToken = _authService.CreateToken(result.Data);
                 return Ok(accessToken);
             }
             return BadRequest(result);
-
-
         }
-
-
     }
 }
