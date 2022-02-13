@@ -53,7 +53,6 @@ namespace API
                 }
                 );
 
-
             services.AddControllers();
             //appsettings.json'daki ConnectionStrings'da "DefaultConnection" ismindeki bağlantı adresi değişkene atandı. 
             var dbConnection = Configuration.GetConnectionString("DefaultConnection");
@@ -68,6 +67,10 @@ namespace API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOfferService, OfferService>();
+            services.AddScoped<IAccountService, AccountService>();
+
             services.AddScoped<ITokenHelper, JwtHelper>();
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -100,6 +103,28 @@ namespace API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+              
+                //jwt tokeni kullanmak için
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                    {
+                        new OpenApiSecurityScheme{
+                            Reference = new OpenApiReference  {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
             });
         }
 
@@ -117,6 +142,7 @@ namespace API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             //hangfire

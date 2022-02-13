@@ -22,7 +22,7 @@ namespace Data.Concrete.EntityFramework.Contexts
         public DbSet<Product> Products { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<User> Users { get; set; }
-
+        public DbSet<Offer> Offers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

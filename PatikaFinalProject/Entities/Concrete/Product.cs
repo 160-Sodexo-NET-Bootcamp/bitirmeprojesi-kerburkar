@@ -14,7 +14,6 @@ namespace Entities.Concrete
         public string Description { get; set; }
         public string ProductPicture { get; set; }
         public decimal Price { get; set; }
-        public bool OfferedPrice { get; set; }
         public bool IsSold { get; set; }
         public bool IsOfferable { get; set; }
         public int CategoryId { get; set; }
@@ -24,9 +23,11 @@ namespace Entities.Concrete
         public int StatusId { get; set; }
         public Status Status { get; set; }
         public int BrandId { get; set; }
-        public Brand Brand { get; set; }    
+        public Brand Brand { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
 
-
+        public virtual IList<Offer> Offers { get; set; }
 
 
 

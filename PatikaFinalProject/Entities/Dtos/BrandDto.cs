@@ -1,17 +1,14 @@
-﻿using Entities.Abstract;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Concrete
+namespace Entities.Dtos
 {
-    public class Colour: IEntity
+    public class BrandDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public virtual IList<Product> Products { get; set; }
-
     }
 }

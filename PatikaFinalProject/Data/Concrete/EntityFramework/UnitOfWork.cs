@@ -19,6 +19,7 @@ namespace Data.Concrete.EntityFramework
         private readonly EfProductRepository _productRepository;
         private readonly EfStatusRepository _statusRepository;
         private readonly EfUserRepository _userRepository;
+        private readonly EFOfferRepository _offerRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -30,6 +31,7 @@ namespace Data.Concrete.EntityFramework
         public IProductRepository Products => _productRepository ?? new EfProductRepository(_context);
         public IStatusRepository Statuses => _statusRepository ?? new EfStatusRepository(_context);
         public IUserRepository Users => _userRepository ?? new EfUserRepository(_context);
+        public IOfferRepository Offers => _offerRepository ?? new EFOfferRepository(_context);
 
 
         public async Task<int> SaveAsync()

@@ -16,6 +16,16 @@ namespace Services.Utilities.Mapping.AutoMapper
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<Category, CategoryGetDto>().ReverseMap();
 
+            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Product, ProductGetDto>().ReverseMap();
+
+            CreateMap<Brand, BrandDto>().ReverseMap();
+            CreateMap<Status, StatusDto>().ReverseMap();
+            CreateMap<Colour, ColourDto>().ReverseMap();
+
+            CreateMap<Offer, OfferDto>().ReverseMap();
+            CreateMap<Offer, OfferListDto>().ReverseMap();
+
         }
     }
 }

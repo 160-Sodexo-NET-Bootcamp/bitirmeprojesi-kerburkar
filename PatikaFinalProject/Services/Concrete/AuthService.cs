@@ -66,8 +66,7 @@ namespace Services.Concrete
             {
                 return new ErrorDataResult<User>(null, "Şifre Yanlış.");
             }
-            return new SuccessDataResult<User>(user, "Başarıyla Giriş Yaptınız.");
-            
+            return new SuccessDataResult<User>(user, "Başarıyla Giriş Yaptınız.");          
         }
         public AccessToken CreateToken(User user)
         {

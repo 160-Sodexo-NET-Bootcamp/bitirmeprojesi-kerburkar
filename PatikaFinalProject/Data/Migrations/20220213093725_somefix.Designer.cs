@@ -4,14 +4,16 @@ using Data.Concrete.EntityFramework.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220213093725_somefix")]
+    partial class somefix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,37 +66,6 @@ namespace Data.Migrations
                     b.ToTable("Colours");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.Offer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("OfferDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("OfferStatus")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("OfferedPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("OfferedUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OfferedUserId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Offers");
-                });
-
             modelBuilder.Entity("Entities.Concrete.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -122,6 +93,9 @@ namespace Data.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("OfferedPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -195,25 +169,6 @@ namespace Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.Offer", b =>
-                {
-                    b.HasOne("Entities.Concrete.User", "User")
-                        .WithMany()
-                        .HasForeignKey("OfferedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Concrete.Product", "Product")
-                        .WithMany("Offers")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Entities.Concrete.Product", b =>
                 {
                     b.HasOne("Entities.Concrete.Brand", "Brand")
@@ -270,11 +225,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Entities.Concrete.Colour", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Entities.Concrete.Product", b =>
-                {
-                    b.Navigation("Offers");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Status", b =>
