@@ -14,6 +14,7 @@ namespace Data.Abstract
         IProductRepository Products { get; }
         IStatusRepository Statuses   { get; }
         IUserRepository Users { get; }
+        IOfferRepository Offers { get; }
 
         //veri tabanındaki bütün save işlemleri için;
         Task<int> SaveAsync();

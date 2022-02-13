@@ -1,4 +1,5 @@
 ﻿using Entities.Abstract;
+using Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,7 +21,7 @@ namespace Entities.Concrete
         public User User { get; set; }
       
         public DateTime OfferDate { get; set; }
-
+        public OfferStatus OfferStatus { get; set; }
     }
 
 }

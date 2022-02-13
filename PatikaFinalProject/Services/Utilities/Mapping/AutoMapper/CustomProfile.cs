@@ -23,7 +23,7 @@ namespace Services.Utilities.Mapping.AutoMapper
             CreateMap<Status, StatusDto>().ReverseMap();
             CreateMap<Colour, ColourDto>().ReverseMap();
 
-
+            CreateMap<Offer, OfferDto>().ReverseMap();
         }
     }
 }
