@@ -31,17 +31,29 @@ namespace Services.Concrete
                 return new ErrorResult("Ürün Bulunamadı");
             }
 
-            var offer = new Offer()
+            var offerExist = await _unitOfWork.Offers.GetAsync(q=>q.OfferedUserId == userId && q.ProductId==productId);
+            if (offerExist == null)
             {
-                ProductId = productId,
-                OfferedUserId = userId,
-                OfferStatus = Entities.Enums.OfferStatus.Sold,
-                OfferDate = DateTime.Now,
-                OfferedPrice = product.Price,
-            };
+                var offer = new Offer()
+                {
+                    ProductId = productId,
+                    OfferedUserId = userId,
+                    OfferStatus = Entities.Enums.OfferStatus.Sold,
+                    OfferDate = DateTime.Now,
+                    OfferedPrice = product.Price,
+                };
+                await _unitOfWork.Offers.AddAsync(offer);
+            }
+            else
+            {
+                offerExist.OfferStatus = Entities.Enums.OfferStatus.Sold;
+                offerExist.OfferDate = DateTime.Now;
+                offerExist.OfferedPrice = product.Price;
+                await _unitOfWork.Offers.UpdateAsync(offerExist);
+            }
            
-            product.IsSold = true;
-            await _unitOfWork.Offers.AddAsync(offer);
+        
+            product.IsSold = true;          
             await _unitOfWork.Products.UpdateAsync(product);
             await _unitOfWork.SaveAsync();
             return new SuccessResult("Ürün Satın Alındı");
@@ -56,14 +68,23 @@ namespace Services.Concrete
 
         public async Task<IResult> GiveOffer(OfferDto offerDto, int userId)
         {
-            var offer = _mapper.Map<Offer>(offerDto);
-            offer.OfferDate = DateTime.Now;
-            offer.OfferStatus = Entities.Enums.OfferStatus.Offered;
-            offer.OfferedUserId = userId;
-            await _unitOfWork.Offers.AddAsync(offer);
-            await _unitOfWork.SaveAsync();
-            return new SuccessResult("Teklif Başarıyla gönderildi.");
+            var offerExist = await _unitOfWork.Offers.GetAsync(q => q.OfferedUserId == userId && q.ProductId == offerDto.ProductId);
+            if(offerExist == null)
+            {
+                var offer = _mapper.Map<Offer>(offerDto);
+                offer.OfferDate = DateTime.Now;
+                offer.OfferStatus = Entities.Enums.OfferStatus.Offered;
+                offer.OfferedUserId = userId;
+                await _unitOfWork.Offers.AddAsync(offer);
+                await _unitOfWork.SaveAsync();
+                return new SuccessResult("Teklif Başarıyla gönderildi.");
+            }
+            else
+            {
+                return new ErrorResult("Bu Ürüne Daha Önce teklif gönderildi.");
 
+            }
+         
         }
 
         public async Task<IResult> CancelOffer(int productId, int userId)

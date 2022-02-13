@@ -14,7 +14,6 @@ namespace Entities.Dtos
         public string Description { get; set; }
         public string ProductPicture { get; set; }
         public decimal Price { get; set; }
-        public decimal OfferedPrice { get; set; }
         public bool IsSold { get; set; }
         public bool IsOfferable { get; set; }
         public CategoryDto Category { get; set; }

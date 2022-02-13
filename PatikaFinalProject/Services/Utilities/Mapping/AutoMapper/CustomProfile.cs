@@ -24,6 +24,8 @@ namespace Services.Utilities.Mapping.AutoMapper
             CreateMap<Colour, ColourDto>().ReverseMap();
 
             CreateMap<Offer, OfferDto>().ReverseMap();
+            CreateMap<Offer, OfferListDto>().ReverseMap();
+
         }
     }
 }
