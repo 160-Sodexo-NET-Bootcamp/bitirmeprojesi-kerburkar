@@ -16,6 +16,7 @@ namespace Entities.Concrete
         public bool IsBlocked { get; set; } = false;
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
-        
+        public virtual IList<Product> Products { get; set; }
+
     }
 }
