@@ -47,6 +47,7 @@ namespace API
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 )
+                //fluentValidation kullanılması için.
                 .AddFluentValidation(fv =>
                 {
                     fv.RegisterValidatorsFromAssemblyContaining<RegisterValidator>();
@@ -65,16 +66,19 @@ namespace API
             );
             //Proje derlendiğinde UnitOfWork çalışması için eklendi.
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //proje derlendiğinde service'lerin çalışması için eklendi.
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOfferService, OfferService>();
             services.AddScoped<IAccountService, AccountService>();
 
+            //tokenHelper service çalışması için eklendi.
             services.AddScoped<ITokenHelper, JwtHelper>();
+            //appsettings.json'daki token ayarlarını çekmek için eklendi.
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
-            //Token için Validate Kurallarý
+            //Token için Validate Kuralları
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -89,22 +93,22 @@ namespace API
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.SecurityKey))
                     };
                 });
-            //mail servisi için
+            //mail servisi için eklendi.
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IMailService, MailService>();
 
-            //AutoMapper için
+            //AutoMapper için eklendi.
             services.AddAutoMapper(typeof(CustomProfile));
 
-            //hangfire için
+            //hangfire için eklendi.
             services.AddHangfire(x => x.UseSqlServerStorage(Configuration["ConnectionStrings:DefaultHangfireConnection"]));
             services.AddHangfireServer();
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-              
-                //jwt tokeni kullanmak için
+
+                //jwt tokeni kullanmak için eklendi.
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -134,6 +138,7 @@ namespace API
             if (env.IsDevelopment())
 
             {
+                //dataSeed çalışması için.
                 DataSeed.SeedAsync(app);
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
@@ -145,7 +150,7 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //hangfire
+            //hangfire arayüzünü kullanmak için.
             app.UseHangfireDashboard();
 
             app.UseEndpoints(endpoints =>
