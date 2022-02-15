@@ -25,7 +25,7 @@ namespace API.Controllers
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest("Kullanıcı Bulunamadı");
+                return BadRequest("Kullanıcı Bulunamadı.");
             }
             var userIntId = Convert.ToInt32(userId);
             var result = await _accountService.MyOffers(userIntId);
@@ -38,7 +38,7 @@ namespace API.Controllers
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest("Kullanıcı Bulunamadı");
+                return BadRequest("Kullanıcı Bulunamadı.");
             }
             var userIntId = Convert.ToInt32(userId);
             var result = await _accountService.IncomingOffers(userIntId);
@@ -51,23 +51,17 @@ namespace API.Controllers
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             if (string.IsNullOrEmpty(userId))
             {
-                return BadRequest("Kullanıcı Bulunamadı");
+                return BadRequest("Kullanıcı Bulunamadı.");
             }
             var userIntId = Convert.ToInt32(userId);
             var result = await _accountService.BuyProduct(offerId,userIntId);
             return Ok(result);
         }
 
-        [HttpPost("changes")]
+        [HttpPost("changeofferstatus")]
         public async Task<IActionResult> ChangeOfferStatus(int offerId,int statusId)
         {
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if (string.IsNullOrEmpty(userId))
-            {
-                return BadRequest("Kullanıcı Bulunamadı");
-            }
-            var userIntId = Convert.ToInt32(userId);
-            var result = await _accountService.BuyProduct(offerId, userIntId);
+            var result = await _accountService.ChangeOfferStatus(offerId, statusId);
             return Ok(result);
         }
     }

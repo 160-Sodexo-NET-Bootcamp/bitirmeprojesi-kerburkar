@@ -10,7 +10,5 @@ namespace Entities.Dtos
     {
         public int ProductId { get; set; }
         public decimal OfferedPrice { get; set; }
- 
-
     }
 }
