@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Services.Utilities.Services
 {
+    //mail gönderme işlemini yapmak için;
     public class MailService : IMailService
     {
         private readonly MailSettings _mailSettings;

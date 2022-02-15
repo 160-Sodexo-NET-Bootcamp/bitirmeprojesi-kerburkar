@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Concrete.EntityFramework.Contexts
 {
-    //Veritabanı bağlantı sınıfı oluşturuldu.
+    //Veritabanı bağlantı sınıfı oluşturuldu. veri tabanının tabloları.
     public class ApplicationDbContext : DbContext
     {
         //Startup'da oluşurken option parametresi gönderilecek, bu option için de bağlantı bilgisi olacak ve base'e gönderecek.

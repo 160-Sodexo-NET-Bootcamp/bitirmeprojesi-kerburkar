@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace Data.Concrete.EntityFramework
 {
+    //unitOfWork pattern'de 
+    //tüm repository'leri tek class üzerinden yönetmek için;
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;

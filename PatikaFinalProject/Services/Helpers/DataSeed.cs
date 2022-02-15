@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Services.Helpers
 {
+    //proje çalıştığında tablolarda veri yoksa demo data kaydetmek için;
     public static class DataSeed
     {
         public static async Task SeedAsync(IApplicationBuilder app)

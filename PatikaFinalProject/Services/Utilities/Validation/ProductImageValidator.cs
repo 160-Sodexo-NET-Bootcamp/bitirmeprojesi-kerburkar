@@ -16,11 +16,11 @@ namespace Services.Utilities.Validation
 
             RuleFor(q => q.ProductImage).NotNull().WithMessage("Ürün Resmi Alanı Boş Olmamalı.");
             RuleFor(f => f.ProductImage.Length).ExclusiveBetween(0, 400)
-               .WithMessage($"Ürün Resmi 400KB dan büyük olamaz")
+               .WithMessage($"Ürün Resmi 400KB dan Büyük Olmamalı.")
                .When(f => f.ProductImage != null);
 
             RuleFor(x => x.ProductImage.ContentType).Must(x => x.Equals("image/jpeg") || x.Equals("image/jpg") || x.Equals("image/png"))
-                .WithMessage("Ürün Resmi yalnızca jpeg,jpg,png destekler");
+                .WithMessage("Ürün Resmi Yalnızca jpeg,jpg,png Destekler.");
 
             RuleFor(q => q.ProductId).NotNull().WithMessage("Ürün Id Alanı Boş Olmamalı.");
 

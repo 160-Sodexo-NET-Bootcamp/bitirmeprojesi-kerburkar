@@ -11,6 +11,8 @@ namespace Entities.Concrete
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        //aynı status'de birden fazla ürün olabileceği için liste
         public virtual IList<Product> Products { get; set; }
     }
 }

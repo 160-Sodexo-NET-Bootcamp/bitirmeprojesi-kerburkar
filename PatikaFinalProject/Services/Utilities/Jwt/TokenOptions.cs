@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Services.Utilities.Jwt
 {
+    //appSettings'teki token ayarlarını tutmak için;
     public class TokenOptions
     {
         public string Audience { get; set; }

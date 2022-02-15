@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Services.Utilities.Services.Models
 {
+    //gmail ya da başka servis üzerinden gönderici maili bilgileri;
     public class MailSettings
     {
         public string Mail { get; set; }

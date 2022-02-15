@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Services.Utilities.Jobs
 {
+    //Email gönderme job'ı.
     public class EmailSendingScheduleJobManager
     {
         private readonly IMailService _mailService;
@@ -17,9 +18,10 @@ namespace Services.Utilities.Jobs
             _mailService = mailService ?? throw new ArgumentNullException(nameof(mailService));
         }
 
-        public async Task Process(MailRequest mailMessageDto)
+        public async Task Process(MailRequest mailRequest)
         {
-            await _mailService.SendEmailAsync(mailMessageDto);
+            //SendMailJob kısmından gelen mailRequest mailService'e gönderilir.
+            await _mailService.SendEmailAsync(mailRequest);
         }
     }
 }

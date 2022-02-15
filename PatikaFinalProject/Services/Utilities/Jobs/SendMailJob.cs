@@ -8,15 +8,17 @@ using System.Threading.Tasks;
 
 namespace Services.Utilities.Jobs
 {
-    //kayıtları 5 kez deneyip çalışması için
+    //kayıtları 5 kez deneyip çalışması için;
     [AutomaticRetry(Attempts = 5)]
     public static class SendMailJob
     {
-        public static void SendMailEnqueue(MailRequest mailMessageDto)
+        //hangfire üzerinden mail işi kuyruğa gönderilir. (fireAndForget)
+        public static void SendMailEnqueue(MailRequest mailRequest)
         {
+            //mail detayları mailRequest üzerinden EmailSendingScheduleJobManager'a gider.
             Hangfire.BackgroundJob.Enqueue<EmailSendingScheduleJobManager>
                 (
-                 job => job.Process(mailMessageDto)
+                 job => job.Process(mailRequest)
                  );
         }
     }

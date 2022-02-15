@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Services.Utilities.Mapping.AutoMapper
 {
+    //entity'ler ve dto'lar arası map'leme için;
     public class CustomProfile : Profile
     {
         public CustomProfile()

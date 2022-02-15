@@ -24,6 +24,7 @@ namespace Services.Utilities.Jwt
 
         }
 
+        //gelen kullanıcı bilgileri üzerinden JwtToken oluşturulması için;
         public AccessToken CreateToken(User user)
         {
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
@@ -52,6 +53,7 @@ namespace Services.Utilities.Jwt
             );
             return jwt;
         }
+        //kullanıcı bilgileri (id ve email) token'ın içine eklemek için;
         private IEnumerable<Claim> SetClaims(User user)
         {
             var userName = (string.IsNullOrEmpty(user.FirstName) && string.IsNullOrEmpty(user.LastName))

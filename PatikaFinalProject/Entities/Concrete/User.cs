@@ -15,7 +15,11 @@ namespace Entities.Concrete
         public string LastName { get; set; }
         public bool IsBlocked { get; set; } = false;
         public byte[] PasswordHash { get; set; }
+
+        //tuzlama işlemi için
         public byte[] PasswordSalt { get; set; }
+
+        //bir kullanıcının birden fazla ürünü olabileceği için liste
         public virtual IList<Product> Products { get; set; }
 
     }
