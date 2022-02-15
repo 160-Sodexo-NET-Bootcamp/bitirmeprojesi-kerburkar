@@ -11,6 +11,8 @@ namespace Entities.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        //kategoriyi getirirken o kategoriye ait ürünleri de getirmesi için;
         public virtual IList<Product> Products { get; set; }
     }
 }

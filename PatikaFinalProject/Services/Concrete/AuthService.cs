@@ -27,11 +27,14 @@ namespace Services.Concrete
 
         public async Task<IResult> Register(RegisterDto registerDto)
         {
+            //kullanıcının mail adresinin kontrolü için;
             var mailExist = await _unitOfWork.Users.GetAsync(q => q.Email == registerDto.Email);
             if (mailExist != null)
             {
                 return new ErrorResult("Mail Adresi Kayıtlıdır.");
             }
+
+            //hash'lenmiş şifte ve salt için;
             HashingHelper.CreatePasswordHash(registerDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
             var user = new User()
             {
@@ -42,8 +45,12 @@ namespace Services.Concrete
                 PasswordSalt = passwordSalt,
                 IsBlocked = false
             };
+
+            //oluşturulan kullanıcının veri tabanına gönderilmesi için;
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.SaveAsync();
+
+            //gönderilen kullanıcı mailine hangfire üzerinden hoş geldiniz maili gönderilmesi için;
             SendMailJob.SendMailEnqueue(new Utilities.Services.Models.MailRequest()
             {
                 ToEmail = registerDto.Email,
@@ -56,11 +63,13 @@ namespace Services.Concrete
         //giriş işlemleri için;
         public async Task<IDataResult<User>> Login(LoginDto loginDto)
         {
+            //gelen mail'i veritabanından kontrol edilmesi için;
             var user = await _unitOfWork.Users.GetAsync(q=>q.Email==loginDto.Email);
             if (user == null)
             {
                 return new ErrorDataResult<User>(null, "Kullanıcı Bulunamadı.");
             }
+            //gelen şifre ile o kullanıcının veritabanındaki passwordHash ve passwordSalt değerleri karşılaştırılamsı için;
             var checkPassword = HashingHelper.VerifyPasswordHash(loginDto.Password,user.PasswordHash,user.PasswordSalt);
             if (!checkPassword)
             {

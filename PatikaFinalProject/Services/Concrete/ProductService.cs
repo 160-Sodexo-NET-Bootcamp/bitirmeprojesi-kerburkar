@@ -23,7 +23,7 @@ namespace Services.Concrete
             _mapper = mapper;
         }
 
-
+        //userId token üzerinden alınıyor.
         public async Task<IResult> Add(ProductDto productDto,string userId)
         {
            
