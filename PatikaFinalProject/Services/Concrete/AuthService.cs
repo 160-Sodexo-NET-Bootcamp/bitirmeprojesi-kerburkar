@@ -73,7 +73,27 @@ namespace Services.Concrete
             var checkPassword = HashingHelper.VerifyPasswordHash(loginDto.Password,user.PasswordHash,user.PasswordSalt);
             if (!checkPassword)
             {
+                //kullanıcı tablosunda minumum 2 hatalı giriş yapılmışsa bu da 3. olacağı için hesabı kitlenecek.
+                if (user.FailedLoginCount >= 2)
+                {
+                    await BlockUser(user);
+                    SendMailJob.SendMailEnqueue(new Utilities.Services.Models.MailRequest()
+                    {
+                        ToEmail = user.Email,
+                        Subject = "Hesabınız Kitlenmiştir.",
+                        Body = "Şifrenizi 3 Kez Yanlış Girdiniz. Hesabınız kitlenmiştir. :("
+                    });
+                    return new ErrorDataResult<User>(null, "Hesabınız Kitlenmiştir.");
+                }
+                else
+                {
+                    await UpdateFailedCount(user);
+                }
                 return new ErrorDataResult<User>(null, "Şifre Yanlış.");
+            }
+            if (user.FailedLoginCount != 0)
+            {
+                await ResetFailedCount(user);
             }
             return new SuccessDataResult<User>(user, "Başarıyla Giriş Yaptınız.");          
         }
@@ -86,6 +106,31 @@ namespace Services.Concrete
         {
             var user = await _unitOfWork.Users.GetAsync(q => q.Email == email);
             return user;
+        }
+
+        //kullanıcı şifre kontrolü için;
+        private async Task BlockUser(User user)
+        {
+            user.IsBlocked = true;
+            await _unitOfWork.Users.UpdateAsync(user);
+            await _unitOfWork.SaveAsync();
+        }
+
+        //kullanıcı yanlış girişlerini güncellemek için;
+        private async Task UpdateFailedCount(User user)
+        {
+
+            user.FailedLoginCount = user.FailedLoginCount + 1;
+            await _unitOfWork.Users.UpdateAsync(user);
+            await _unitOfWork.SaveAsync();
+        }
+
+        //kullanıcı şifresini doğru girdiğin hatalı giriş sayısını sıfırlamak için;
+        private async Task ResetFailedCount(User user)
+        {
+            user.FailedLoginCount = 0;
+            await _unitOfWork.Users.UpdateAsync(user);
+            await _unitOfWork.SaveAsync();
         }
 
     }
